@@ -6,13 +6,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sofka.customerservice.support.ClienteTestDataBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
@@ -24,21 +26,14 @@ class ClienteIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Test
     void shouldCreateCliente() throws Exception {
-        String body = """
-                {
-                  "clienteId": 1,
-                  "nombre": "Jose Lema",
-                  "genero": "Masculino",
-                  "edad": 30,
-                  "identificacion": "1234567890",
-                  "direccion": "Otavalo sn y principal",
-                  "telefono": "098254785",
-                  "contrasena": "1234",
-                  "estado": true
-                }
-                """;
+        String body = objectMapper.writeValueAsString(
+                ClienteTestDataBuilder.unCliente().buildRequest()
+        );
 
         mockMvc.perform(post("/clientes")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -50,19 +45,18 @@ class ClienteIntegrationTest {
 
     @Test
     void shouldListClientes() throws Exception {
-        String body = """
-                {
-                  "clienteId": 2,
-                  "nombre": "Marianela Montalvo",
-                  "genero": "Femenino",
-                  "edad": 28,
-                  "identificacion": "9876543210",
-                  "direccion": "Amazonas y NNUU",
-                  "telefono": "097548965",
-                  "contrasena": "5678",
-                  "estado": true
-                }
-                """;
+        String body = objectMapper.writeValueAsString(
+                ClienteTestDataBuilder.unCliente()
+                        .conClienteId(2L)
+                        .conNombre("Marianela Montalvo")
+                        .conGenero("Femenino")
+                        .conEdad(28)
+                        .conIdentificacion("9876543210")
+                        .conDireccion("Amazonas y NNUU")
+                        .conTelefono("097548965")
+                        .conContrasena("5678")
+                        .buildRequest()
+        );
 
         mockMvc.perform(post("/clientes")
                 .contentType(MediaType.APPLICATION_JSON)
