@@ -3,14 +3,14 @@ package com.sofka.customerservice.domain;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import com.sofka.customerservice.support.ClienteTestDataBuilder;
+import com.sofka.customerservice.soporte.ClientePruebaBuilder;
 import org.junit.jupiter.api.Test;
 
 class ClienteTest {
 
     @Test
-    void shouldUpdateClienteData() {
-        Cliente cliente = ClienteTestDataBuilder.unCliente().build();
+    void deberiaActualizarLosDatosDelCliente() {
+        Cliente cliente = ClientePruebaBuilder.unCliente().construir();
 
         cliente.actualizarDatos(
                 "Jose Lema Actualizado",

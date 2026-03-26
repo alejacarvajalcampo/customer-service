@@ -1,9 +1,9 @@
-package com.sofka.customerservice.support;
+package com.sofka.customerservice.soporte;
 
 import com.sofka.customerservice.domain.Cliente;
 import com.sofka.customerservice.dto.ClienteRequest;
 
-public class ClienteTestDataBuilder {
+public class ClientePruebaBuilder {
 
     private Long clienteId = 1L;
     private String nombre = "Jose Lema";
@@ -15,56 +15,56 @@ public class ClienteTestDataBuilder {
     private String contrasena = "1234";
     private Boolean estado = true;
 
-    public static ClienteTestDataBuilder unCliente() {
-        return new ClienteTestDataBuilder();
+    public static ClientePruebaBuilder unCliente() {
+        return new ClientePruebaBuilder();
     }
 
-    public ClienteTestDataBuilder conClienteId(Long clienteId) {
+    public ClientePruebaBuilder conClienteId(Long clienteId) {
         this.clienteId = clienteId;
         return this;
     }
 
-    public ClienteTestDataBuilder conNombre(String nombre) {
+    public ClientePruebaBuilder conNombre(String nombre) {
         this.nombre = nombre;
         return this;
     }
 
-    public ClienteTestDataBuilder conGenero(String genero) {
+    public ClientePruebaBuilder conGenero(String genero) {
         this.genero = genero;
         return this;
     }
 
-    public ClienteTestDataBuilder conEdad(Integer edad) {
+    public ClientePruebaBuilder conEdad(Integer edad) {
         this.edad = edad;
         return this;
     }
 
-    public ClienteTestDataBuilder conIdentificacion(String identificacion) {
+    public ClientePruebaBuilder conIdentificacion(String identificacion) {
         this.identificacion = identificacion;
         return this;
     }
 
-    public ClienteTestDataBuilder conDireccion(String direccion) {
+    public ClientePruebaBuilder conDireccion(String direccion) {
         this.direccion = direccion;
         return this;
     }
 
-    public ClienteTestDataBuilder conTelefono(String telefono) {
+    public ClientePruebaBuilder conTelefono(String telefono) {
         this.telefono = telefono;
         return this;
     }
 
-    public ClienteTestDataBuilder conContrasena(String contrasena) {
+    public ClientePruebaBuilder conContrasena(String contrasena) {
         this.contrasena = contrasena;
         return this;
     }
 
-    public ClienteTestDataBuilder conEstado(Boolean estado) {
+    public ClientePruebaBuilder conEstado(Boolean estado) {
         this.estado = estado;
         return this;
     }
 
-    public Cliente build() {
+    public Cliente construir() {
         return new Cliente(
                 nombre,
                 genero,
@@ -78,7 +78,7 @@ public class ClienteTestDataBuilder {
         );
     }
 
-    public ClienteRequest buildRequest() {
+    public ClienteRequest construirRequest() {
         return new ClienteRequest(
                 clienteId,
                 nombre,

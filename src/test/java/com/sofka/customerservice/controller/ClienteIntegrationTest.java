@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sofka.customerservice.support.ClienteTestDataBuilder;
+import com.sofka.customerservice.soporte.ClientePruebaBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -30,9 +30,9 @@ class ClienteIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void shouldCreateCliente() throws Exception {
+    void deberiaCrearCliente() throws Exception {
         String body = objectMapper.writeValueAsString(
-                ClienteTestDataBuilder.unCliente().buildRequest()
+                ClientePruebaBuilder.unCliente().construirRequest()
         );
 
         mockMvc.perform(post("/clientes")
@@ -44,9 +44,9 @@ class ClienteIntegrationTest {
     }
 
     @Test
-    void shouldListClientes() throws Exception {
+    void deberiaListarClientes() throws Exception {
         String body = objectMapper.writeValueAsString(
-                ClienteTestDataBuilder.unCliente()
+                ClientePruebaBuilder.unCliente()
                         .conClienteId(2L)
                         .conNombre("Marianela Montalvo")
                         .conGenero("Femenino")
@@ -55,7 +55,7 @@ class ClienteIntegrationTest {
                         .conDireccion("Amazonas y NNUU")
                         .conTelefono("097548965")
                         .conContrasena("5678")
-                        .buildRequest()
+                        .construirRequest()
         );
 
         mockMvc.perform(post("/clientes")

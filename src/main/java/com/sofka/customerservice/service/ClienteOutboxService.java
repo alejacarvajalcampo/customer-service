@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sofka.customerservice.domain.Cliente;
 import com.sofka.customerservice.domain.OutboxEvent;
 import com.sofka.customerservice.messaging.ClienteEvent;
+import com.sofka.customerservice.messaging.TipoEventoCliente;
 import com.sofka.customerservice.repository.OutboxEventRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,17 +31,17 @@ public class ClienteOutboxService {
         if (!messagingEnabled) {
             return;
         }
-        persist(cliente, "CLIENTE_UPSERT");
+        persist(cliente, TipoEventoCliente.CLIENTE_UPSERT);
     }
 
     public void registerDelete(Cliente cliente) {
         if (!messagingEnabled) {
             return;
         }
-        persist(cliente, "CLIENTE_DELETE");
+        persist(cliente, TipoEventoCliente.CLIENTE_DELETE);
     }
 
-    private void persist(Cliente cliente, String eventType) {
+    private void persist(Cliente cliente, TipoEventoCliente eventType) {
         ClienteEvent event = new ClienteEvent(
                 eventType,
                 cliente.getClienteId(),
@@ -50,7 +51,7 @@ public class ClienteOutboxService {
         );
         try {
             outboxEventRepository.save(
-                    OutboxEvent.pending("CLIENTE", cliente.getClienteId(), eventType, objectMapper.writeValueAsString(event))
+                    OutboxEvent.pending("CLIENTE", cliente.getClienteId(), eventType.name(), objectMapper.writeValueAsString(event))
             );
         } catch (JsonProcessingException exception) {
             throw new IllegalStateException("No fue posible serializar el evento de cliente", exception);
