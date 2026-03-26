@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS outbox_event;
 DROP TABLE IF EXISTS clientes;
 DROP TABLE IF EXISTS personas;
 
@@ -24,6 +25,21 @@ CREATE TABLE clientes (
 
 CREATE INDEX idx_personas_identificacion ON personas (identificacion);
 CREATE INDEX idx_clientes_cliente_id ON clientes (cliente_id);
+
+CREATE TABLE outbox_event (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    aggregate_type VARCHAR(50) NOT NULL,
+    aggregate_id BIGINT NOT NULL,
+    event_type VARCHAR(50) NOT NULL,
+    payload LONGTEXT NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    attempts INTEGER NOT NULL,
+    last_error VARCHAR(500),
+    created_at DATETIME NOT NULL,
+    published_at DATETIME NULL
+);
+
+CREATE INDEX idx_outbox_status_id ON outbox_event (status, id);
 
 INSERT INTO personas (
     persona_id,

@@ -4,7 +4,6 @@ import com.sofka.customerservice.domain.Cliente;
 import com.sofka.customerservice.dto.ClienteRequest;
 import com.sofka.customerservice.exception.ClienteNotFoundException;
 import com.sofka.customerservice.exception.DuplicateClienteException;
-import com.sofka.customerservice.messaging.ClienteEventPublisher;
 import com.sofka.customerservice.repository.ClienteRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,11 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class ClienteService implements ClienteApplicationService {
 
     private final ClienteRepository clienteRepository;
-    private final ClienteEventPublisher clienteEventPublisher;
+    private final ClienteOutboxService clienteOutboxService;
 
-    public ClienteService(ClienteRepository clienteRepository, ClienteEventPublisher clienteEventPublisher) {
+    public ClienteService(ClienteRepository clienteRepository, ClienteOutboxService clienteOutboxService) {
         this.clienteRepository = clienteRepository;
-        this.clienteEventPublisher = clienteEventPublisher;
+        this.clienteOutboxService = clienteOutboxService;
     }
 
     @Override
@@ -27,7 +26,7 @@ public class ClienteService implements ClienteApplicationService {
     public Cliente crear(Cliente cliente) {
         validarDuplicadosEnCreacion(cliente);
         Cliente saved = clienteRepository.save(cliente);
-        clienteEventPublisher.publishUpsert(saved);
+        clienteOutboxService.registerUpsert(saved);
         return saved;
     }
 
@@ -60,7 +59,7 @@ public class ClienteService implements ClienteApplicationService {
                 request.estado()
         );
         Cliente saved = clienteRepository.save(cliente);
-        clienteEventPublisher.publishUpsert(saved);
+        clienteOutboxService.registerUpsert(saved);
         return saved;
     }
 
@@ -68,7 +67,7 @@ public class ClienteService implements ClienteApplicationService {
     @Transactional
     public void eliminar(Long clienteId) {
         Cliente cliente = obtenerPorClienteId(clienteId);
-        clienteEventPublisher.publishDelete(cliente);
+        clienteOutboxService.registerDelete(cliente);
         clienteRepository.delete(cliente);
     }
 
